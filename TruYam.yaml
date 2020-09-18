@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: truyamdeployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: TruYam
+  template:
+    metadata:
+      labels:
+        app: TruYam
+    spec:
+      containers:
+      - name: truyamrepos
+        image: truyamcr.azurecr.io/truyamrepos:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: dsconfigsn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: truyam
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: TruYam
